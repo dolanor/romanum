@@ -1,5 +1,10 @@
 package romanum
 
+import (
+	"fmt"
+	"math"
+)
+
 type Roman int
 
 const (
@@ -27,9 +32,28 @@ var r2a = map[string]Roman{
 }
 
 func FromString(roman string) Roman {
+	total := 0
+	last := math.MaxInt64
+	curr := 0
 	val := 0
+
 	for _, r := range roman {
-		val += int(r2a[string(r)])
+		curr = int(r2a[string(r)])
+		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "val:", val, "total:", total)
+
+		switch {
+		case curr != last && curr < last && val != 0:
+			total += val
+			val = curr
+		case curr > last:
+			total += curr - val
+			val = 0
+		default:
+			val += curr
+		}
+		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "val:", val, "total:", total)
+		last = curr
 	}
-	return Roman(val)
+	total += val
+	return Roman(total)
 }
