@@ -2,7 +2,7 @@ package romanum
 
 import "testing"
 
-func TestFromStringSimple(t *testing.T) {
+func TestParseSimple(t *testing.T) {
 	tc := []struct {
 		in   string
 		want Roman
@@ -17,7 +17,7 @@ func TestFromStringSimple(t *testing.T) {
 	}
 
 	for _, c := range tc {
-		got := FromString(c.in)
+		got := Parse(c.in)
 
 		if got != c.want {
 			t.Errorf("want %d, got %d", c.want, got)
@@ -25,23 +25,23 @@ func TestFromStringSimple(t *testing.T) {
 	}
 }
 
-func TestFromStringComposed(t *testing.T) {
+func TestParseComposed(t *testing.T) {
 	tc := []struct {
 		in   string
 		want Roman
 	}{
 		{"II", I + I},
-		{"III", 3 * I},
+		{"III", I + I + I},
 		{"IV", V - I},
 		{"IIV", V - I - I},
 		{"XIX", X - I + X},
 		{"XVII", X + V + I + I},
 		{"MDM", M - D + M},
-		{"MDMLCXIX", M - D + M + C - L + X + X - I},
+		{"MCMLCXIX", M - C + M + C - L + X - I + X},
 	}
 
 	for _, c := range tc {
-		got := FromString(c.in)
+		got := Parse(c.in)
 
 		if got != c.want {
 			t.Errorf("want %d, got %d", c.want, got)

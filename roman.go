@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-type Roman int
+type Roman int64
 
 const (
 	I Roman = 1
@@ -21,7 +21,7 @@ func (r Roman) String() string {
 	return ""
 }
 
-var r2a = map[string]Roman{
+var roman2arabic = map[string]Roman{
 	"I": 1,
 	"V": 5,
 	"X": 10,
@@ -31,29 +31,28 @@ var r2a = map[string]Roman{
 	"M": 1000,
 }
 
-func FromString(roman string) Roman {
-	total := 0
-	last := math.MaxInt64
-	curr := 0
-	val := 0
+// Parse parses a subtractive notation of roman numerals.
+func Parse(roman string) Roman {
+	var curr, last, tmpSum, total int64
+	last = math.MaxInt64
 
 	for _, r := range roman {
-		curr = int(r2a[string(r)])
-		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "val:", val, "total:", total)
+		curr = int64(roman2arabic[string(r)])
+		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "tmpSum:", tmpSum, "total:", total)
 
 		switch {
-		case curr != last && curr < last && val != 0:
-			total += val
-			val = curr
+		case curr != last && curr < last && tmpSum != 0:
+			total += tmpSum
+			tmpSum = curr
 		case curr > last:
-			total += curr - val
-			val = 0
+			total += curr - tmpSum
+			tmpSum = 0
 		default:
-			val += curr
+			tmpSum += curr
 		}
-		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "val:", val, "total:", total)
+		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "tmpSum:", tmpSum, "total:", total)
 		last = curr
 	}
-	total += val
+	total += tmpSum
 	return Roman(total)
 }
