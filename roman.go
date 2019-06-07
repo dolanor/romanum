@@ -1,7 +1,6 @@
 package romanum
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -23,7 +22,6 @@ func (r Roman) String() string {
 	var val = int64(r)
 	var output string
 	for val > 0 {
-		fmt.Println("output:", output, "val:", val)
 		switch {
 		case val-int64(M) >= 0:
 			val -= int64(M)
@@ -69,7 +67,6 @@ func Parse(roman string) Roman {
 
 	for _, r := range roman {
 		curr = int64(roman2arabic[string(r)])
-		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "tmpSum:", tmpSum, "total:", total)
 
 		switch {
 		case curr != last && curr < last && tmpSum != 0:
@@ -81,7 +78,6 @@ func Parse(roman string) Roman {
 		default:
 			tmpSum += curr
 		}
-		fmt.Println(roman, ":", "[", string(r), "]", "curr:", curr, "tmpSum:", tmpSum, "total:", total)
 		last = curr
 	}
 	total += tmpSum
